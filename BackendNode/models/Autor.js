@@ -1,4 +1,4 @@
-//const mongoose = required ('mongoose') ;
+const mongoose = required ("mongoose") ;
 
 const AutorSchema = new mongoose.Schema ({
     nombre: String,
