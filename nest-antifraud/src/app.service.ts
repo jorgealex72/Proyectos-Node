@@ -13,15 +13,15 @@ export class AppService implements OnModuleInit {
 
   async onModuleInit() {
     try {
-      //const sessionToken = await this.authService.getSessionToken();
+      const sessionToken = await this.authService.getSessionToken();
       //this.logger.debug('🎉 Sesión iniciada y session-token obtenido:', sessionToken);
       
       // Aquí puedes guardar el sessionToken para futuros usos
       // Por ejemplo, en una variable de clase o un servicio de estado
 
       // --- Ahora llamamos al AntifraudService ---
-      const antifraudToken = await this.antifraudService.getAntifraudToken();
-      //this.logger.debug('✅ Antifraud Token obtenido exitosamente:', antifraudToken);
+      const antifraudToken = await this.antifraudService.getAntifraudToken(sessionToken);
+      this.logger.debug('✅ Antifraud Token obtenido exitosamente:', antifraudToken);
       // Aquí puedes almacenar este antifraudToken para futuras operaciones de análisis.
       // Puedes añadir una propiedad a AntifraudService de forma similar a como lo hicimos con AuthService.
 

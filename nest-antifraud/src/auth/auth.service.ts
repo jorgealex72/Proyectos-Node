@@ -52,10 +52,10 @@ export class AuthService {
         this.httpService.get(this.apiUrl, { headers }).pipe(
             map(res => {
                 // Logs de depuración para la respuesta exitosa (código de estado 2xx)
-                this.logger.debug('Respuesta completa de la API de sesión:');
-                this.logger.debug('Status:', res.status);
-                this.logger.debug('Data:', res.data);
-                this.logger.debug('Headers:', res.headers);
+                // this.logger.debug('Respuesta completa de la API de sesión:');
+                // this.logger.debug('Status:', res.status);
+                // this.logger.debug('Data:', res.data);
+                // this.logger.debug('Headers:', res.headers);
                 return res.data.session_token; // Retorna el objeto res completo para seguir la cadena
               }),
             catchError(error => {

@@ -31,16 +31,17 @@ export class AntifraudService {
    * Obtiene el token antifraude de la API externa usando un método GET.
    * Requiere el session-token y el app-token en los encabezados.
    */
-  async getAntifraudToken(): Promise<string> {
+  async getAntifraudToken(sessionToken: string): Promise<string> {
     this.logger.log(`Intentando obtener antifraud_token de: ${this.apiUrl} con método GET`);
 
-    let sessionToken: string;
-    try {
-      sessionToken = await this.authService.getSessionToken();
-      this.logger.debug(`Session-token obtenido para antifraud: ${sessionToken.substring(0, 5)}...`);
-    } catch (error) {
-      throw new InternalServerErrorException('No se pudo obtener un session-token válido para la validación antifraude.');
-    }
+    // let sessionToken: string;
+    // try {
+    //   sessionToken = await this.authService.getSessionToken();
+    //   this.logger.debug(`Session-token obtenido para antifraud: ${sessionToken}...`);
+    // } catch (error) {
+    //   throw new InternalServerErrorException('No se pudo obtener un session-token válido para la validación antifraude.');
+    // }
+    this.logger.debug(`Session-token recibido para antifraud: ${sessionToken}...`);
 
     // Definimos los encabezados que se enviarán con la solicitud GET
     const headers = {
@@ -50,10 +51,14 @@ export class AntifraudService {
     };
 
     try {
-      // *** CAMBIO CLAVE: Usamos this.httpService.get en lugar de .post ***
       const antifraudToken = await firstValueFrom(
         this.httpService.get(this.apiUrl, { headers }).pipe( // Las llamadas GET no llevan cuerpo en el segundo parámetro
           map(res => {
+            // Asegúrate de que la respuesta de la API tenga la estructura esperada, por ejemplo, res.data.token
+            if (!res.data || typeof res.data.token === 'undefined') {
+                this.logger.error('La respuesta de la API antifraude no contiene la propiedad "token" esperada:', res.data);
+                throw new InternalServerErrorException('Formato de respuesta de la API antifraude inesperado.');
+              }
             return res.data.token; 
           }),
           catchError((error: AxiosError) => {
